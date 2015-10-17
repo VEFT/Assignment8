@@ -36,7 +36,7 @@ const CompanySchema = mongoose.Schema({
         required: true,
         minlength: 1
     },
-    punchcard_lifetime {
+      punchcard_lifetime: {
         type: Number,
         required: true
     }

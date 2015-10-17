@@ -1,30 +1,44 @@
 'use strict';
 
 const express = require('express');
-const bodyParser = require('body-parser');
-const _ = require('lodash');
+const api = require('./api');
+const mongoose = require('mongoose');
 const port = 4000;
 const app = express();
-app.use(bodyParser.json());
 
-const companies = [];
-const users = [];
+app.use('/api', api);
 
-app.listen(port, () => {
-    console.log('Server is on port:', port);
+// Connect to MongoDB
+mongoose.connect('localhost/assignment8');
+mongoose.connection.once('open', () => {
+    console.log('mongoose is connected');
+    app.listen(port, () => {
+        console.log('Server is on port:', port);
+    });
 });
+
+//const bodyParser = require('body-parser');
+//const _ = require('lodash');
+//app.use(bodyParser.json());
+
+//const companies = [];
+//const users = [];
+
 
 /*
  * Returns a list of all registered companies.
  */
+/*
 app.get('/api/companies', (req, res) => {
     res.status(200).send(companies);
 });
+*/
 
 /*
  * Adds a new company. The required properties are "name" and "punchCount",
  * indicating how many punches a user needs to collect in order to get a discount.
  */
+/*
 app.post('/api/companies', (req, res) => {
     const company = req.body;
 
@@ -42,10 +56,12 @@ app.post('/api/companies', (req, res) => {
     companies.push(company);
     res.status(201).send(company);
 });
+*/
 
 /*
  * Returns a given company by id.
  */
+/*
 app.get('/api/companies/:id', (req, res) => {
     const id = req.params.id;
     const company = _.find(companies, (company) => {
@@ -59,17 +75,21 @@ app.get('/api/companies/:id', (req, res) => {
 
     res.status(200).send(company);
 });
+*/
 
 /*
  * Returns a list of all users.
  */
+/*
 app.get('/api/users', (req, res) => {
     res.status(200).send(users);
 });
+*/
 
 /*
  * Adds a new user to the system. The following properties must be specified: name, email.
  */
+/*
 app.post('/api/users', (req, res) => {
     const user = req.body;
 
@@ -88,6 +108,7 @@ app.post('/api/users', (req, res) => {
     users.push(user);
     res.status(201).send(user);
 });
+*/
 
 /*
  * Returns a list of all punches registered for the given user.
@@ -95,6 +116,7 @@ app.post('/api/users', (req, res) => {
  * and when it was created.
  * It is be possible to filter the list by adding a "?company={id}" to the query.
  */
+/*
 app.get('/api/users/:id/punches', (req, res) => {
     const queryCompanyId = req.query.company;
     const punches = [];
@@ -137,10 +159,12 @@ app.get('/api/users/:id/punches', (req, res) => {
 
     res.status(200).send(punches);
 });
+*/
 
 /*
  * Adds a new punch to the user account. The only information needed is the id of the company.
  */
+/*
 app.post('/api/users/:id/punches', (req, res) => {
     const punch = req.body;
     const id = req.params.id;
@@ -172,4 +196,4 @@ app.post('/api/users/:id/punches', (req, res) => {
     user.punches.push(punch);
     res.status(201).send(user.punches);
 });
-
+*/

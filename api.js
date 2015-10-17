@@ -5,8 +5,9 @@ const bodyParser = require('body-parser');
 const models = require('./models');
 const api = express();
 
-/*
- *
+/* Fetches a list of companies that have been added to MongoDB.
+ * This endpoint uses no authentication.
+ * If no company has been added this endpoint returns an empty list.
  */
 api.get('/companies', (req, res) => {
     models.Company.find({}, (err, docs) => {
@@ -22,17 +23,21 @@ api.get('/companies', (req, res) => {
     });
 });
 
-/*
- *
+/* Fetches a given company that has been added to MongoDB by ID.
+ * This endpoints returns a single JSON document if found.
+ * If no company is found by the ID then this endpoint returns response with status code 404.
+ * No authentication is needed for this endpoint.
  */
 api.get('/companies/:id', (req, res) => {
+    
 });
 
 /*
  *
  */
 api.post('/companies', (req, res) => {
-
+    const data = req.body;
+    console.log(data);
 });
 
 /*

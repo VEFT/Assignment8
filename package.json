@@ -1,0 +1,22 @@
+{
+  "name": "assignment8",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VEFT/Assignment8.git"
+  },
+  "author": "Daniel Benediktsson and Jorundur Jorundsson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VEFT/Assignment8/issues"
+  },
+  "homepage": "https://github.com/VEFT/Assignment8#readme",
+  "dependencies": {
+    "nodemon": "^1.7.1"
+  }
+}

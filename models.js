@@ -16,7 +16,8 @@ const UserSchema = mongoose.Schema({
     },
     age: {
         type: Number,
-        required: true
+        required: true,
+        min = 0
     },
     gender: {
         type: String,
@@ -30,7 +31,7 @@ const CompanySchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
-        minlenght: 1
+        minlength: 1
     },
     description: {
         type: String,

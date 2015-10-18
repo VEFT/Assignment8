@@ -29,6 +29,7 @@ api.get('/companies', (req, res) => {
  * with status code 404. No authentication is needed for this endpoint.
  */
 api.get('/companies/:id', (req, res) => {
+    const id = req.params.id;
 
 });
 
@@ -38,8 +39,17 @@ api.get('/companies/:id', (req, res) => {
  * This endpoint is authenticated using the ADMIN_TOKEN header.
  */
 api.post('/companies', (req, res) => {
-    const data = req.body;
-    console.log(data);
+    const c = new models.Company(req.body);
+    c.save(function(err, doc) {
+        if (err) {
+            res.status(500).send(err);
+            return;
+        }
+        else {
+            res.send(doc);
+            return;
+        }
+    })
 });
 
 /* Returns a list of all users that are in the MongoDB. This endpoint

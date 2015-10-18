@@ -57,7 +57,17 @@ api.post('/companies', bodyParser.json(), (req, res) => {
  * must be removed from the document before it is written to the response.
  */
 api.get('/users', (req, res) => {
-
+    models.User.find({}, (err, docs) => {
+        console.log(err);
+        console.log(docs);
+        if(err) {
+            res.status(500).send(err);
+            return;
+        } else {
+            res.send(docs);
+        }
+        res.send('ok');
+    });
 });
 
 /*
@@ -69,7 +79,18 @@ api.get('users/:id', (req, res) => {
 /*
  *
  */
-api.post('users', (req, res) => {
+api.post('users', bodyParser.json(), (req, res) => {
+    const c = new models.User(req.body);
+    c.save(function(err, doc) {
+        if (err) {
+            res.status(500).send(err);
+            return;
+        }
+        else {
+            res.send(doc);
+            return;
+        }
+    })
 });
 
 

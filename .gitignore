@@ -1,4 +1,5 @@
 node_modules
+journal
 local.0
 local.ns
 mongod.lock

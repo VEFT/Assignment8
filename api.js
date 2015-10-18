@@ -25,23 +25,26 @@ api.get('/companies', (req, res) => {
 
 /* Fetches a given company that has been added to MongoDB by ID.
  * This endpoints returns a single JSON document if found.
- * If no company is found by the ID then this endpoint returns response with status code 404.
- * No authentication is needed for this endpoint.
+ * If no company is found by the ID then this endpoint returns response
+ * with status code 404. No authentication is needed for this endpoint.
  */
 api.get('/companies/:id', (req, res) => {
-    
+
 });
 
-/*
- *
+/* Allows administrators to add new companies to MongoDB.
+ * The company is posted with a POST method and the data sent as a JSON object
+ * within the request body.
+ * This endpoint is authenticated using the ADMIN_TOKEN header.
  */
 api.post('/companies', (req, res) => {
     const data = req.body;
     console.log(data);
 });
 
-/*
- *
+/* Returns a list of all users that are in the MongoDB. This endpoint
+ * is not authenticated and the token value within the user document
+ * must be removed from the document before it is written to the response.
  */
 api.get('/users', (req, res) => {
 

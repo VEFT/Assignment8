@@ -38,7 +38,7 @@ api.get('/companies/:id', (req, res) => {
  * within the request body.
  * This endpoint is authenticated using the ADMIN_TOKEN header.
  */
-api.post('/companies', (req, res) => {
+api.post('/companies', bodyParser.json(), (req, res) => {
     const c = new models.Company(req.body);
     c.save(function(err, doc) {
         if (err) {

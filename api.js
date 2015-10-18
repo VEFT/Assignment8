@@ -80,8 +80,8 @@ api.get('users/:id', (req, res) => {
  *
  */
 api.post('users', bodyParser.json(), (req, res) => {
-    const c = new models.User(req.body);
-    c.save(function(err, doc) {
+    const u = new models.User(req.body);
+    u.save(function(err, doc) {
         if (err) {
             res.status(500).send(err);
             return;

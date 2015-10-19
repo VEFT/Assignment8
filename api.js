@@ -16,7 +16,7 @@ api.get('/companies', (req, res) => {
         if(err) {
             res.status(500).send(err);
         } else {
-            res.send(docs);
+            res.status(200).send(docs);
         }
     });
 });
@@ -28,7 +28,15 @@ api.get('/companies', (req, res) => {
  */
 api.get('/companies/:id', (req, res) => {
     const id = req.params.id;
-
+    models.Company.findById(id, (err, docs) => {
+        console.log(err);
+        console.log(docs);
+        if(err) {
+            res.status(500).send(err);
+        } else {
+            res.status(200).send(docs);
+        }
+    });
 });
 
 /* Allows administrators to add new companies to MongoDB.
@@ -42,7 +50,7 @@ api.post('/companies', bodyParser.json(), (req, res) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.send(doc);
+            res.status(201).send(doc);
         }
     })
 });
@@ -58,7 +66,7 @@ api.get('/users', (req, res) => {
         if(err) {
             res.status(500).send(err);
         } else {
-            res.send(docs);
+            res.status(200).send(docs);
         }
     });
 });
@@ -78,7 +86,7 @@ api.post('users', bodyParser.json(), (req, res) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.send(doc);
+            res.status(201).send(doc);
         }
     })
 });

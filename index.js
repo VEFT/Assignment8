@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const port = 4000;
 const app = express();
 
+// Direct all request with the prefix 'api' to 'api.js'.
 app.use('/api', api);
 
 // Connect to MongoDB

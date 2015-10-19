@@ -12,7 +12,7 @@ const api = express();
 api.get('/companies', (req, res) => {
     models.Company.find({}, (err, docs) => {
         if(err) {
-            res.status(500).send(err);
+            res.status(500).send(err.name);
         } else {
             res.status(200).send(docs);
         }
@@ -28,7 +28,7 @@ api.get('/companies/:id', (req, res) => {
     const id = req.params.id;
     models.Company.findOne({ _id : id }, (err, docs) => {
         if(err) {
-            res.status(404).send(err);
+            res.status(404).send(err.name);
         } else {
             console.log(docs);
             res.status(200).send(docs);
@@ -45,7 +45,7 @@ api.post('/companies', bodyParser.json(), (req, res) => {
     const c = new models.Company(req.body);
     c.save(function(err, doc) {
         if (err) {
-            res.status(500).send(err);
+            res.status(500).send(err.name);
         } else {
             res.status(201).send(doc);
         }
@@ -61,7 +61,7 @@ api.get('/users', (req, res) => {
         console.log(err);
         console.log(docs);
         if(err) {
-            res.status(500).send(err);
+            res.status(500).send(err.name);
         } else {
             res.status(200).send(docs);
         }
@@ -77,7 +77,7 @@ api.get('users/:id', (req, res) => {
         console.log(err);
         console.log(docs);
         if(err) {
-            res.status(404).send(err);
+            res.status(404).send(err.name);
         } else {
             console.log(docs);
             res.status(200).send(docs);
@@ -89,10 +89,11 @@ api.get('users/:id', (req, res) => {
  *
  */
 api.post('users', bodyParser.json(), (req, res) => {
+    console.log("inside post users!");
     const u = new models.User(req.body);
     u.save(function(err, doc) {
         if (err) {
-            res.status(500).send(err);
+            res.status(500).send(err.name);
         } else {
             res.status(201).send(doc);
         }

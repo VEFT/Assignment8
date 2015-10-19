@@ -4,6 +4,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const models = require('./models');
 const api = express();
+const ADMIN_TOKEN = "ADMIN_TOKEN";
+const VALIDATION_ERROR_NAME = "ValidationError";
+const NOT_FOUND_ERROR_NAME = "NotFound";
 
 /* Fetches a list of companies that have been added to MongoDB.
  * This endpoint uses no authentication.
@@ -28,7 +31,9 @@ api.get('/companies/:id', (req, res) => {
     const id = req.params.id;
     models.Company.findOne({ _id : id }, (err, docs) => {
         if(err) {
-            res.status(404).send(err.name);
+            res.status(500).send(err.name);
+        } else if(!docs) {
+            res.status(404).send(NOT_FOUND_ERROR_NAME);
         } else {
             console.log(docs);
             res.status(200).send(docs);
@@ -42,10 +47,19 @@ api.get('/companies/:id', (req, res) => {
  * This endpoint is authenticated using the ADMIN_TOKEN header.
  */
 api.post('/companies', bodyParser.json(), (req, res) => {
+    if(req.headers.authorization !== ADMIN_TOKEN) {
+        res.status(401).send("Unauthorized");
+        return;
+    }
+
     const c = new models.Company(req.body);
     c.save(function(err, doc) {
         if (err) {
-            res.status(500).send(err.name);
+            if(err.name === VALIDATION_ERROR_NAME) {
+                res.status(412).send(err.name);
+            } else {
+                res.status(500).send(err.name);
+            }
         } else {
             res.status(201).send(doc);
         }
@@ -74,8 +88,12 @@ api.get('/users', (req, res) => {
 api.get('/users/:id', (req, res) => {
     const id = req.params.id;
     models.User.findOne({ _id : id }, (err, docs) => {
+        console.log(err);
+        console.log(docs);
         if(err) {
-            res.status(404).send(err.name);
+            res.status(500).send(err.name);
+        } else if(!docs) {
+            res.status(404).send(NOT_FOUND_ERROR_NAME);
         } else {
             res.status(200).send(docs);
         }
@@ -86,16 +104,24 @@ api.get('/users/:id', (req, res) => {
  *
  */
 api.post('/users', bodyParser.json(), (req, res) => {
+    if(req.headers.authorization !== ADMIN_TOKEN) {
+        res.status(401).send("Unauthorized");
+        return;
+    }
+
     const u = new models.User(req.body);
     u.save(function(err, doc) {
         if (err) {
-            res.status(500).send(err.name);
+            if(err.name === VALIDATION_ERROR_NAME) {
+                res.status(412).send(err.name);
+            } else {
+                res.status(500).send(err.name);
+            }
         } else {
             res.status(201).send(doc);
         }
     })
 });
-
 
 /*
  *

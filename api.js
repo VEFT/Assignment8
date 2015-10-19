@@ -11,8 +11,6 @@ const api = express();
  */
 api.get('/companies', (req, res) => {
     models.Company.find({}, (err, docs) => {
-        console.log(err);
-        console.log(docs);
         if(err) {
             res.status(500).send(err);
         } else {
@@ -29,8 +27,6 @@ api.get('/companies', (req, res) => {
 api.get('/companies/:id', (req, res) => {
     const id = req.params.id;
     models.Company.findOne({ _id : id }, (err, docs) => {
-        console.log(err);
-        console.log(docs);
         if(err) {
             res.status(404).send(err);
         } else {

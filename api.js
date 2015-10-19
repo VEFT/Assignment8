@@ -15,11 +15,9 @@ api.get('/companies', (req, res) => {
         console.log(docs);
         if(err) {
             res.status(500).send(err);
-            return;
         } else {
             res.send(docs);
         }
-        res.send('ok');
     });
 });
 
@@ -43,11 +41,8 @@ api.post('/companies', bodyParser.json(), (req, res) => {
     c.save(function(err, doc) {
         if (err) {
             res.status(500).send(err);
-            return;
-        }
-        else {
+        } else {
             res.send(doc);
-            return;
         }
     })
 });
@@ -62,11 +57,9 @@ api.get('/users', (req, res) => {
         console.log(docs);
         if(err) {
             res.status(500).send(err);
-            return;
         } else {
             res.send(docs);
         }
-        res.send('ok');
     });
 });
 
@@ -84,11 +77,8 @@ api.post('users', bodyParser.json(), (req, res) => {
     u.save(function(err, doc) {
         if (err) {
             res.status(500).send(err);
-            return;
-        }
-        else {
+        } else {
             res.send(doc);
-            return;
         }
     })
 });

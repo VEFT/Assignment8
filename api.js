@@ -32,8 +32,7 @@ api.get('/companies/:id', (req, res) => {
         console.log(err);
         console.log(docs);
         if(err) {
-            console.log("WHAT!!");
-            res.status(500).send(err);
+            res.status(404).send(err);
         } else {
             console.log(docs);
             res.status(200).send(docs);
@@ -82,8 +81,7 @@ api.get('users/:id', (req, res) => {
         console.log(err);
         console.log(docs);
         if(err) {
-            console.log("WHAT!!");
-            res.status(500).send(err);
+            res.status(404).send(err);
         } else {
             console.log(docs);
             res.status(200).send(docs);

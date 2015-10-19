@@ -32,8 +32,10 @@ api.get('/companies/:id', (req, res) => {
         console.log(err);
         console.log(docs);
         if(err) {
+            console.log("WHAT!!");
             res.status(500).send(err);
         } else {
+            console.log(docs);
             res.status(200).send(docs);
         }
     });
@@ -75,6 +77,18 @@ api.get('/users', (req, res) => {
  *
  */
 api.get('users/:id', (req, res) => {
+    const id = req.params.id;
+    models.User.findById(id, (err, docs) => {
+        console.log(err);
+        console.log(docs);
+        if(err) {
+            console.log("WHAT!!");
+            res.status(500).send(err);
+        } else {
+            console.log(docs);
+            res.status(200).send(docs);
+        }
+    });
 });
 
 /*

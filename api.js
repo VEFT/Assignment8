@@ -127,10 +127,37 @@ api.post('/users', bodyParser.json(), (req, res) => {
  *
  */
 api.post('punchcards/:company_id', (req, res) => {
+    if(req.headers.authorization !== ADMIN_TOKEN) {
+        res.status(401).send("Unauthorized");
+        return;
+    }
+
+    const id = req.params.id;
+    models.Company.findOne({ _id : id }, (err, docs) => {
+        if(err) {
+            res.status(500).send(err.name);
+        } else if(!docs) {
+            res.status(404).send(NOT_FOUND_ERROR_NAME);
+        } else {
+            console.log(docs);
+            res.status(200).send(docs);
+        }
+    });
+
+    /*
+    const p = new models.Punchcard(req.body);
+    p.save(function(err, doc) {
+        if (err) {
+            if(err.name === VALIDATION_ERROR_NAME) {
+                res.status(412).send(err.name);
+            } else {
+                res.status(500).send(err.name);
+            }
+        } else {
+            res.status(201).send(doc);
+        }
+    })
+    */
 });
 
-
-/*
- *
- */
 module.exports = api;

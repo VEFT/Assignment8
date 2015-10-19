@@ -28,7 +28,7 @@ api.get('/companies', (req, res) => {
  */
 api.get('/companies/:id', (req, res) => {
     const id = req.params.id;
-    models.Company.findById(id, (err, docs) => {
+    models.Company.findOne({ _id : id }, (err, docs) => {
         console.log(err);
         console.log(docs);
         if(err) {

@@ -124,7 +124,6 @@ api.post('/users', bodyParser.json(), (req, res) => {
  *
  */
 api.post('/punchcards/:company_id', (req, res) => {
-    console.log("FIRST THING FIRST: ", req.body);
     const token = req.headers.authorization;
     if(!token) {
         res.status(401).send();
@@ -135,10 +134,10 @@ api.post('/punchcards/:company_id', (req, res) => {
             } else if(!docs) {
                 res.status(401).send(UNAUTHORIZED_ERROR_MESSAGE);
             } else {
-                const user_id = docs._id;
-                const id = req.params.company_id;
-                console.log("req.body: ");
-                models.Company.findOne({ _id : id }, (err, docs) => {
+                //const user_id = docs._id;
+                const company_id = req.params.company_id;
+                console.log("req.body: ", req.body);
+                models.Company.findOne({ _id : company_id }, (err, docs) => {
                     if(err) {
                         res.status(500).send(err.name);
                     } else if(!docs) {

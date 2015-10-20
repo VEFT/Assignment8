@@ -50,7 +50,6 @@ api.get('/companies/:id', (req, res) => {
  */
 api.post('/companies', bodyParser.json(), (req, res) => {
     const token = req.header("ADMIN_TOKEN");
-    console.log(token);
     if(!token || token !== ADMIN_TOKEN) {
         res.status(401).send(UNAUTHORIZED_ERROR_MESSAGE);
     } else {
@@ -78,7 +77,7 @@ api.get('/users', (req, res) => {
         if(err) {
             res.status(500).send(err.name);
         } else {
-            res.status(200).send(docs);
+            res.status(200).send(docs.map((val) => { val.token = undefined; return val; }));
         }
     });
 });
@@ -189,53 +188,6 @@ api.post('/punchcards/:company_id', (req, res) => {
             }
         });
     }
-
-    /*const token = req.headers.authorization;
-    if(!token) {
-        res.status(401).send();
-        return;
-    } else {
-        models.User.findOne({ token : token }, (err, docs) => {
-            if(err) {
-                res.status(500).send(err.name);
-                return;
-            } else if(!docs) {
-                res.status(401).send(UNAUTHORIZED_ERROR_MESSAGE);
-                return;
-            } else {
-                const user_id = docs._id;
-            }
-        });
-    }
-
-    const id = req.params.id;
-    models.Company.findOne({ _id : id }, (err, docs) => {
-    console.log("USER_ID", user_id);
-        if(err) {
-            res.status(500).send(err.name);
-        } else if(!docs) {
-            res.status(404).send(NOT_FOUND_ERROR_MESSAGE);
-        } else {
-            console.log(docs);
-            res.status(200).send(docs);
-        }
-    });
-    *(
-
-    /*
-    const p = new models.Punchcard(req.body);
-    p.save(function(err, doc) {
-        if (err) {
-            if(err.name === VALIDATION_ERROR_NAME) {
-                res.status(412).send(err.name);
-            } else {
-                res.status(500).send(err.name);
-            }
-        } else {
-            res.status(201).send(doc);
-        }
-    })
-    */
 });
 
 module.exports = api;

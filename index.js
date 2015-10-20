@@ -10,7 +10,7 @@ const app = express();
 app.use('/api', api);
 
 // Connect to MongoDB
-mongoose.connect('localhost/assignment8');
+mongoose.connect('localhost/app');
 mongoose.connection.once('open', () => {
     console.log('mongoose is connected');
     app.listen(port, () => {

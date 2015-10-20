@@ -120,8 +120,11 @@ api.post('/users', bodyParser.json(), (req, res) => {
     }
 });
 
-/*
- *
+/* Creates a new punch card for company :company_id.
+ * This endpoint is authenticated using the user token.
+ * Clients sends a request with TOKEN value in the header.
+ * That value is used to authenticate the user. A new document is created in the
+ * app.punchcards collections with the user_id which owns the TOKEN value found in the header.
  */
 api.post('/punchcards/:company_id', (req, res) => {
     const token = req.headers.authorization;

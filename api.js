@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const models = require('./models');
 const api = express();
-const ADMIN_TOKEN = "ADMIN_TOKEN";
+const ADMIN_TOKEN = "admintoken";
 const VALIDATION_ERROR_NAME = "ValidationError";
 const NOT_FOUND_ERROR_MESSAGE = "NotFound";
 const UNAUTHORIZED_ERROR_MESSAGE = "Unauthorized";
@@ -49,7 +49,8 @@ api.get('/companies/:id', (req, res) => {
  * This endpoint is authenticated using the ADMIN_TOKEN header.
  */
 api.post('/companies', bodyParser.json(), (req, res) => {
-    const token = req.headers.authorization;
+    const token = req.header("ADMIN_TOKEN");
+    console.log(token);
     if(!token || token !== ADMIN_TOKEN) {
         res.status(401).send(UNAUTHORIZED_ERROR_MESSAGE);
     } else {
@@ -62,7 +63,7 @@ api.post('/companies', bodyParser.json(), (req, res) => {
                     res.status(500).send(err.name);
                 }
             } else {
-                res.status(201).send(doc);
+                res.status(201).send({ company_id: c._id});
             }
         })
     }
@@ -102,7 +103,7 @@ api.get('/users/:id', (req, res) => {
  *
  */
 api.post('/users', bodyParser.json(), (req, res) => {
-    const token = req.headers.authorization;
+    const token = req.header("ADMIN_TOKEN");
     if(!token || token !== ADMIN_TOKEN) {
         res.status(401).send(UNAUTHORIZED_ERROR_MESSAGE);
     } else {
@@ -128,7 +129,7 @@ api.post('/users', bodyParser.json(), (req, res) => {
  * app.punchcards collections with the user_id which owns the TOKEN value found in the header.
  */
 api.post('/punchcards/:company_id', (req, res) => {
-    const token = req.headers.authorization;
+    const token = req.header("TOKEN");
     const company_id = req.params.company_id;
     if(!token) {
         res.status(401).send();

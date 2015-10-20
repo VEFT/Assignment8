@@ -46,12 +46,14 @@ const CompanySchema = mongoose.Schema({
 
 const PunchcardSchema = mongoose.Schema({
     company_id: {
-        type: Number,
-        required: true
+        type: String,
+        required: true,
+        minlength: 1
     },
     user_id: {
-        type: Number,
-        required: true
+        type: String,
+        required: true,
+        minlength: 1
     },
     created: {
         type: Date,

@@ -82,7 +82,10 @@ api.get('/users', (req, res) => {
     });
 });
 
-/*
+/* Fetches a given user that has been added to MongoDB by ID.
+ * This endpoints return a single JSON document if found.
+ * If no user is found by the ID then this endpoint returns response
+ * with a status code 404. No authentication is needed for this endpoint.
  *
  */
 api.get('/users/:id', (req, res) => {
@@ -93,13 +96,15 @@ api.get('/users/:id', (req, res) => {
         } else if(!docs) {
             res.status(404).send(NOT_FOUND_ERROR_MESSAGE);
         } else {
-            res.status(200).send(docs);
+            res.status(200).send(docs.map((val) => { val.token = undefined; return val; }));
         }
     });
 });
 
-/*
- *
+/* Allows administrators to add new users to MongoDB.
+ * The user is posted with a POST method and the data sent as a JSON object
+ * within the request body.
+ * This endpoint is authenticated usding the ADMIN_TOKEN header.
  */
 api.post('/users', bodyParser.json(), (req, res) => {
     const token = req.header("ADMIN_TOKEN");

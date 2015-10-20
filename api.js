@@ -8,6 +8,7 @@ const ADMIN_TOKEN = "ADMIN_TOKEN";
 const VALIDATION_ERROR_NAME = "ValidationError";
 const NOT_FOUND_ERROR_MESSAGE = "NotFound";
 const UNAUTHORIZED_ERROR_MESSAGE = "Unauthorized";
+const CONFLICT_ERROR_MESSAGE = "Conflict";
 
 /* Fetches a list of companies that have been added to MongoDB.
  * This endpoint uses no authentication.
@@ -125,38 +126,60 @@ api.post('/users', bodyParser.json(), (req, res) => {
  */
 api.post('/punchcards/:company_id', (req, res) => {
     const token = req.headers.authorization;
+    const company_id = req.params.company_id;
     if(!token) {
         res.status(401).send();
     } else {
-        models.User.findOne({ token : token }, (err, docs) => {
-            if(err) {
-                res.status(500).send(err.name);
-            } else if(!docs) {
+        models.User.findOne({ token : token }, (user_err, user_docs) => {
+            if(user_err) {
+                res.status(500).send(user_err.name);
+            } else if(!user_docs) {
                 res.status(401).send(UNAUTHORIZED_ERROR_MESSAGE);
             } else {
-                //const user_id = docs._id;
-                const company_id = req.params.company_id;
-                console.log("req.body: ", req.body);
-                models.Company.findOne({ _id : company_id }, (err, docs) => {
-                    if(err) {
-                        res.status(500).send(err.name);
-                    } else if(!docs) {
+                models.Company.findOne({ _id : company_id }, (company_err, company_docs) => {
+                    if(company_err) {
+                        res.status(500).send(company_err.name);
+                    } else if(!company_docs) {
                         res.status(404).send(NOT_FOUND_ERROR_MESSAGE);
                     } else {
-                        /*
-                        const p = new models.Punchcard(req.body);
-                        p.save(function(err, doc) {
-                            if (err) {
-                                if(err.name === VALIDATION_ERROR_NAME) {
-                                    res.status(412).send(err.name);
-                                } else {
-                                    res.status(500).send(err.name);
+                        models.Punchcard.find({ company_id: company_id, user_id: user_docs._id }, (punch_err, punch_docs) => {
+                            var is_active = false;
+                            if(punch_err) {
+                                res.status(500).send(punch_err.name);
+                            } else if(punch_docs) {
+                                for(var i = 0; i < punch_docs.length; i++) {
+                                    console.log(punch_docs[i]);
+                                    var punchcard_exp_date = punch_docs[i].created;
+                                    punchcard_exp_date.setDate(punchcard_exp_date.getDate() + company_docs.punchcard_lifetime);
+
+                                    if(punchcard_exp_date >= new Date()) {
+                                        is_active = true;
+                                        break;
+                                    }
                                 }
-                            } else {
-                                res.status(201).send(doc);
                             }
-                        })
-                        */
+
+                            if(is_active) {
+                                res.status(409).send(CONFLICT_ERROR_MESSAGE);
+                            } else {
+                                const body = {};
+                                body.user_id = user_docs._id;
+                                body.company_id = company_id;
+                                const p = new models.Punchcard(body);
+
+                                p.save(function(punch_save_err, punch_save_docs) {
+                                    if (punch_save_err) {
+                                        if(punch_save_err.name === VALIDATION_ERROR_NAME) {
+                                            res.status(412).send(punch_save_err.name);
+                                        } else {
+                                            res.status(500).send(punch_save_err.name);
+                                        }
+                                    } else {
+                                        res.status(201).send(punch_save_docs);
+                                    }
+                                })
+                            }
+                        });
                     }
                 });
             }
